@@ -2,14 +2,14 @@
 
 PhidgetsCurrentSensor30ampDConlyVCP11000_ReubenPython2and3Class
 
-Wrapper (including ability to hook to Tkinter GUI) to control Phidget 30A Current Sensor VCP1100 (VINT).
+Wrapper (including ability to hook to Tkinter GUI) to control Phidget 30A DC Current Sensor VCP1100 (VINT).
 
 From Phidgets' website:
 "The VCP1100 measures the current flow in an electronic circuit or device.
 This Phidget connects to your computer through a VINT Hub.
 Measure in-line DC current flow of up to 30A."
 
-Phidget 30A Current Sensor
+Phidget 30A DC Current Sensor
 ID: VCP1100_0
 https://www.phidgets.com/?&prodid=983
 
