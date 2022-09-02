@@ -21,7 +21,7 @@ www.reubotics.com
 
 Apache 2 License
 
-Software Revision D, 07/21/2022
+Software Revision E, 08/29/2022
 
 Verified working on: 
 Python 2.7, 3.8.
@@ -36,7 +36,7 @@ Raspberry Pi Buster
 ########################### Python module installation instructions, all OS's
 
 PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class, ListOfModuleDependencies: ['future.builtins', 'LowPassFilter_ReubenPython2and3Class', 'Phidget22']
-PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class, ListOfModuleDependencies_TestProgram: ['future.builtins', 'MyPlotterPureTkinterStandAloneProcess_ReubenPython2and3Class', 'MyPrint_ReubenPython2and3Class']
+PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class, ListOfModuleDependencies_TestProgram: ['MyPlotterPureTkinterStandAloneProcess_ReubenPython2and3Class', 'MyPrint_ReubenPython2and3Class']
 PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class, ListOfModuleDependencies_NestedLayers: ['future.builtins', 'numpy', 'pexpect', 'psutil']
 PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class, ListOfModuleDependencies_All: ['future.builtins', 'LowPassFilter_ReubenPython2and3Class', 'MyPlotterPureTkinterStandAloneProcess_ReubenPython2and3Class', 'MyPrint_ReubenPython2and3Class', 'numpy', 'pexpect', 'Phidget22', 'psutil']
 
