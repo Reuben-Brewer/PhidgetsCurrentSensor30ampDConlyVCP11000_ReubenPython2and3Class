@@ -5,6 +5,7 @@ PhidgetsCurrentSensor30ampDConlyVCP11000_ReubenPython2and3Class
 Wrapper (including ability to hook to Tkinter GUI) to control Phidget 30A DC Current Sensor VCP1100 (VINT).
 
 From Phidgets' website:
+
 "The VCP1100 measures the current flow in an electronic circuit or device.
 This Phidget connects to your computer through a VINT Hub.
 Measure in-line DC current flow of up to 30A."
@@ -23,7 +24,7 @@ www.reubotics.com
 
 Apache 2 License
 
-Software Revision D, 07/21/2022
+Software Revision E, 08/29/2022
 
 Verified working on: 
 
@@ -43,7 +44,7 @@ Raspberry Pi Buster
 
 PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class, ListOfModuleDependencies: ['future.builtins', 'LowPassFilter_ReubenPython2and3Class', 'Phidget22']
 
-PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class, ListOfModuleDependencies_TestProgram: ['future.builtins', 'MyPlotterPureTkinterStandAloneProcess_ReubenPython2and3Class', 'MyPrint_ReubenPython2and3Class']
+PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class, ListOfModuleDependencies_TestProgram: ['MyPlotterPureTkinterStandAloneProcess_ReubenPython2and3Class', 'MyPrint_ReubenPython2and3Class']
 
 PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class, ListOfModuleDependencies_NestedLayers: ['future.builtins', 'numpy', 'pexpect', 'psutil']
 
