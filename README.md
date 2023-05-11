@@ -7,7 +7,9 @@ Wrapper (including ability to hook to Tkinter GUI) to control Phidget 30A DC Cur
 From Phidgets' website:
 
 "The VCP1100 measures the current flow in an electronic circuit or device.
+
 This Phidget connects to your computer through a VINT Hub.
+
 Measure in-line DC current flow of up to 30A."
 
 Phidget 30A DC Current Sensor
@@ -24,7 +26,7 @@ www.reubotics.com
 
 Apache 2 License
 
-Software Revision E, 08/29/2022
+Software Revision F, 05/10/2023
 
 Verified working on: 
 
@@ -36,19 +38,22 @@ Raspberry Pi Buster
 
 (no Mac testing yet)
 
-*NOTE THAT YOU MUST INSTALL BOTH THE Phidget22 LIBRARY AS WELL AS THE PYTHON MODULE.*
+*NOTE:
+
+1. YOU MUST INSTALL BOTH THE Phidget22 LIBRARY AS WELL AS THE PYTHON MODULE.
+2. Current must flow from the device's positive (+) terminal to negative (-) terminal.*
 
 ###########################
 
 ########################### Python module installation instructions, all OS's
 
-PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class, ListOfModuleDependencies: ['future.builtins', 'LowPassFilter_ReubenPython2and3Class', 'Phidget22']
+PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class, ListOfModuleDependencies: ['future.builtins', 'LowPassFilterForDictsOfLists_ReubenPython2and3Class', 'Phidget22']
 
 PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class, ListOfModuleDependencies_TestProgram: ['MyPlotterPureTkinterStandAloneProcess_ReubenPython2and3Class', 'MyPrint_ReubenPython2and3Class']
 
 PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class, ListOfModuleDependencies_NestedLayers: ['future.builtins', 'numpy', 'pexpect', 'psutil']
 
-PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class, ListOfModuleDependencies_All: ['future.builtins', 'LowPassFilter_ReubenPython2and3Class', 'MyPlotterPureTkinterStandAloneProcess_ReubenPython2and3Class', 'MyPrint_ReubenPython2and3Class', 'numpy', 'pexpect', 'Phidget22', 'psutil']
+PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class, ListOfModuleDependencies_All:['future.builtins', 'LowPassFilterForDictsOfLists_ReubenPython2and3Class', 'MyPlotterPureTkinterStandAloneProcess_ReubenPython2and3Class', 'MyPrint_ReubenPython2and3Class', 'numpy', 'pexpect', 'Phidget22', 'psutil']
 
 https://pypi.org/project/Phidget22/#files
 
