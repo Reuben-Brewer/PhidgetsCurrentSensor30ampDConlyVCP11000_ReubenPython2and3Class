@@ -6,7 +6,7 @@ reuben.brewer@gmail.com
 www.reubotics.com
 
 Apache 2 License
-Software Revision E, 08/29/2022
+Software Revision F, 05/10/2023
 
 Verified working on: Python 2.7, 3.8 for Windows 8.1, 10 64-bit and Raspberry Pi Buster (no Mac testing yet).
 '''
@@ -14,7 +14,7 @@ Verified working on: Python 2.7, 3.8 for Windows 8.1, 10 64-bit and Raspberry Pi
 __author__ = 'reuben.brewer'
 
 ###########################################################
-from LowPassFilter_ReubenPython2and3Class import *
+from LowPassFilterForDictsOfLists_ReubenPython2and3Class import *
 ###########################################################
 
 ###########################################################
@@ -110,14 +110,17 @@ class PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class(Frame): #Su
 
         self.CurrentSensorList_Current_Amps_Raw = [-11111.0] * self.NumberOfCurrentSensors
         self.CurrentSensorList_Current_Amps_Filtered = [-11111.0] * self.NumberOfCurrentSensors
-        self.CurrentSensorList_Current_Amps_LowPassFilter_ReubenPython2and3ClassObject = list()
+        self.CurrentSensorList_CurrentDerivative_AmpsPerSec = [-11111.0] * self.NumberOfCurrentSensors
+        self.CurrentSensorList_LowPassFilter_ReubenPython2and3ClassObject = list()
+
+        self.CurrentSensorList_Current_Amps_Raw_LAST = [-11111.0] * self.NumberOfCurrentSensors
 
         self.CurrentSensorList_CurrentTime_CurrentSensorGENERALonCurrentChangeCallback = [-11111.0] * self.NumberOfCurrentSensors
         self.CurrentSensorList_StartingTime_CurrentSensorGENERALonCurrentChangeCallback = [self.getPreciseSecondsTimeStampString()] * self.NumberOfCurrentSensors
         self.CurrentSensorList_LastTime_CurrentSensorGENERALonCurrentChangeCallback = [-11111.0] * self.NumberOfCurrentSensors
         self.CurrentSensorList_DataStreamingFrequency_CurrentSensorGENERALonCurrentChangeCallback = [-11111.0] * self.NumberOfCurrentSensors
         self.CurrentSensorList_DataStreamingDeltaT_CurrentSensorGENERALonCurrentChangeCallback = [-11111.0] * self.NumberOfCurrentSensors
-        
+
         self.CurrentSensorList_ListOfOnAttachCallbackFunctionNames = [self.CurrentSensor0onAttachCallback]
         self.CurrentSensorList_ListOfOnDetachCallbackFunctionNames = [self.CurrentSensor0onDetachCallback]
         self.CurrentSensorList_ListOfOnErrorCallbackFunctionNames = [self.CurrentSensor0onErrorCallback]
@@ -410,9 +413,28 @@ class PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class(Frame): #Su
                 print("PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class __init__: Error, 'CurrentSensorList_Current_Amps_ExponentialFilterLambda' must be a length of length 4 with values of 0 or 1.")
                 return
         else:
-            self.CurrentSensorList_Current_Amps_ExponentialFilterLambda = [1.0] * self.NumberOfCurrentSensors #Default to no filtering, new_filtered_value = k * raw_sensor_value + (1 - k) * old_filtered_value
+            self.CurrentSensorList_Current_Amps_ExponentialFilterLambda = [0.95] * self.NumberOfCurrentSensors #Default to no filtering, new_filtered_value = k * raw_sensor_value + (1 - k) * old_filtered_value
 
         print("PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class __init__: CurrentSensorList_Current_Amps_ExponentialFilterLambda: " + str(self.CurrentSensorList_Current_Amps_ExponentialFilterLambda))
+        #########################################################
+        #########################################################
+
+        #########################################################
+        #########################################################
+        if "CurrentSensorList_CurrentDerivative_AmpsPerSec_ExponentialFilterLambda" in setup_dict:
+            CurrentSensorList_CurrentDerivative_AmpsPerSec_ExponentialFilterLambda_TEMP = setup_dict["CurrentSensorList_CurrentDerivative_AmpsPerSec_ExponentialFilterLambda"]
+            if self.IsInputList(CurrentSensorList_CurrentDerivative_AmpsPerSec_ExponentialFilterLambda_TEMP) == 1 and len(CurrentSensorList_CurrentDerivative_AmpsPerSec_ExponentialFilterLambda_TEMP) == self.NumberOfCurrentSensors:
+                self.CurrentSensorList_CurrentDerivative_AmpsPerSec_ExponentialFilterLambda = list()
+                for CurrentSensorChannel, SpeedExponentialFilterLambda_TEMP in enumerate(CurrentSensorList_CurrentDerivative_AmpsPerSec_ExponentialFilterLambda_TEMP):
+                    SpeedExponentialFilterLambda = self.PassThroughFloatValuesInRange_ExitProgramOtherwise("CurrentSensorList_CurrentDerivative_AmpsPerSec_ExponentialFilterLambda, CurrentSensorChannel " + str(CurrentSensorChannel), SpeedExponentialFilterLambda_TEMP, 0.0, 1.0)
+                    self.CurrentSensorList_CurrentDerivative_AmpsPerSec_ExponentialFilterLambda.append(SpeedExponentialFilterLambda)
+            else:
+                print("PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class __init__: Error, 'CurrentSensorList_CurrentDerivative_AmpsPerSec_ExponentialFilterLambda' must be a length of length 4 with values of 0 or 1.")
+                return
+        else:
+            self.CurrentSensorList_CurrentDerivative_AmpsPerSec_ExponentialFilterLambda = [0.95] * self.NumberOfCurrentSensors #Default to no filtering, new_filtered_value = k * raw_sensor_value + (1 - k) * old_filtered_value
+
+        print("PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class __init__: CurrentSensorList_CurrentDerivative_AmpsPerSec_ExponentialFilterLambda: " + str(self.CurrentSensorList_CurrentDerivative_AmpsPerSec_ExponentialFilterLambda))
         #########################################################
         #########################################################
 
@@ -430,16 +452,25 @@ class PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class(Frame): #Su
         #########################################################
         '''
 
+
         #########################################################
         #########################################################
         try:
 
             for CurrentSensorChannel in range(0, self.NumberOfCurrentSensors):
-                self.CurrentSensorList_Current_Amps_LowPassFilter_ReubenPython2and3ClassObject.append(LowPassFilter_ReubenPython2and3Class(dict([("UseMedianFilterFlag", 0),
-                                                                                                                ("UseExponentialSmoothingFilterFlag", 1),
-                                                                                                                ("ExponentialSmoothingFilterLambda", self.CurrentSensorList_Current_Amps_ExponentialFilterLambda[CurrentSensorChannel])])))
+
+                #########################################################
+                DictOfVariableFilterSettings = dict([("Current", dict([("UseMedianFilterFlag", 1), ("UseExponentialSmoothingFilterFlag", 1),("ExponentialSmoothingFilterLambda", self.CurrentSensorList_Current_Amps_ExponentialFilterLambda[CurrentSensorChannel])])),
+                                                    ("CurrentDerivative", dict([("UseMedianFilterFlag", 1), ("UseExponentialSmoothingFilterFlag", 1),("ExponentialSmoothingFilterLambda", self.CurrentSensorList_CurrentDerivative_AmpsPerSec_ExponentialFilterLambda[CurrentSensorChannel])]))])
+
+                LowPassFilterForDictsOfLists_ReubenPython2and3ClassObject_setup_dict = dict([("DictOfVariableFilterSettings", DictOfVariableFilterSettings)])
+
+                LowPassFilterForDictsOfLists_ReubenPython2and3ClassObject = LowPassFilterForDictsOfLists_ReubenPython2and3Class(LowPassFilterForDictsOfLists_ReubenPython2and3ClassObject_setup_dict)
+                #########################################################
+
+                self.CurrentSensorList_LowPassFilter_ReubenPython2and3ClassObject.append(LowPassFilterForDictsOfLists_ReubenPython2and3ClassObject)
                 time.sleep(0.1)
-                LOWPASSFILTER_OPEN_FLAG = self.CurrentSensorList_Current_Amps_LowPassFilter_ReubenPython2and3ClassObject[CurrentSensorChannel].OBJECT_CREATED_SUCCESSFULLY_FLAG
+                LOWPASSFILTER_OPEN_FLAG = self.CurrentSensorList_LowPassFilter_ReubenPython2and3ClassObject[CurrentSensorChannel].OBJECT_CREATED_SUCCESSFULLY_FLAG
 
                 if LOWPASSFILTER_OPEN_FLAG != 1:
                     print("PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class __init__: Failed to open LowPassFilter_ReubenPython2and3ClassObject.")
@@ -467,10 +498,10 @@ class PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class(Frame): #Su
             for CurrentSensorChannel in range(0, self.NumberOfCurrentSensors):
                 self.CurrentSensorList_PhidgetsCurrentSensorObjects.append(CurrentInput())
                 self.CurrentSensorList_PhidgetsCurrentSensorObjects[CurrentSensorChannel].setHubPort(self.VINT_DesiredPortNumber)
-    
+
                 if self.VINT_DesiredSerialNumber != -1: #'-1' means we should open the device regardless of serial number.
                     self.CurrentSensorList_PhidgetsCurrentSensorObjects[CurrentSensorChannel].setDeviceSerialNumber(self.VINT_DesiredSerialNumber)
-    
+
                 self.CurrentSensorList_PhidgetsCurrentSensorObjects[CurrentSensorChannel].setOnCurrentChangeHandler(self.CurrentSensorList_ListOfOnCurrentChangeCallbackFunctionNames[CurrentSensorChannel])
                 self.CurrentSensorList_PhidgetsCurrentSensorObjects[CurrentSensorChannel].setOnAttachHandler(self.CurrentSensorList_ListOfOnAttachCallbackFunctionNames[CurrentSensorChannel])
                 self.CurrentSensorList_PhidgetsCurrentSensorObjects[CurrentSensorChannel].setOnDetachHandler(self.CurrentSensorList_ListOfOnDetachCallbackFunctionNames[CurrentSensorChannel])
@@ -744,28 +775,52 @@ class PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class(Frame): #Su
     def CurrentSensorGENERALonCurrentChangeCallback(self, CurrentSensorChannel, Current_Amps):
 
         try:
-            ##############################
+            ############################################################
+            ############################################################
+            ############################################################
             if self.EXIT_PROGRAM_FLAG == 0:
 
-                ########
+                ############################################################
+                ############################################################
+                self.CurrentSensorList_Current_Amps_Raw[CurrentSensorChannel] = Current_Amps
+
                 self.CurrentSensorList_CurrentTime_CurrentSensorGENERALonCurrentChangeCallback[CurrentSensorChannel] = self.getPreciseSecondsTimeStampString() - self.CurrentSensorList_StartingTime_CurrentSensorGENERALonCurrentChangeCallback[CurrentSensorChannel]
                 self.CurrentSensorList_DataStreamingDeltaT_CurrentSensorGENERALonCurrentChangeCallback[CurrentSensorChannel] = self.CurrentSensorList_CurrentTime_CurrentSensorGENERALonCurrentChangeCallback[CurrentSensorChannel] - self.CurrentSensorList_LastTime_CurrentSensorGENERALonCurrentChangeCallback[CurrentSensorChannel]
 
                 if self.CurrentSensorList_DataStreamingDeltaT_CurrentSensorGENERALonCurrentChangeCallback[CurrentSensorChannel]  != 0.0:
+                    ############################################################
                     self.CurrentSensorList_DataStreamingFrequency_CurrentSensorGENERALonCurrentChangeCallback[CurrentSensorChannel]  = 1.0/self.CurrentSensorList_DataStreamingDeltaT_CurrentSensorGENERALonCurrentChangeCallback[CurrentSensorChannel]
+
+                    results = self.CurrentSensorList_LowPassFilter_ReubenPython2and3ClassObject[CurrentSensorChannel].AddDataDictFromExternalProgram(dict([("Current", self.CurrentSensorList_Current_Amps_Raw[CurrentSensorChannel])]))
+                    self.CurrentSensorList_Current_Amps_Filtered[CurrentSensorChannel] = results["Current"]["Filtered_MostRecentValuesList"][0]
+
+                    CurrentSensorList_CurrentDerivative_AmpsPerSec_TEMP = (self.CurrentSensorList_Current_Amps_Raw[CurrentSensorChannel] - self.CurrentSensorList_Current_Amps_Raw_LAST[CurrentSensorChannel])/self.CurrentSensorList_DataStreamingDeltaT_CurrentSensorGENERALonCurrentChangeCallback[CurrentSensorChannel]
+                    results_deriv = self.CurrentSensorList_LowPassFilter_ReubenPython2and3ClassObject[CurrentSensorChannel].AddDataDictFromExternalProgram(dict([("CurrentDerivative", CurrentSensorList_CurrentDerivative_AmpsPerSec_TEMP)]))
+
+                    self.CurrentSensorList_CurrentDerivative_AmpsPerSec[CurrentSensorChannel] = results_deriv["CurrentDerivative"]["Filtered_MostRecentValuesList"][0]
+
                     self.CurrentSensorList_LastTime_CurrentSensorGENERALonCurrentChangeCallback[CurrentSensorChannel] = self.CurrentSensorList_CurrentTime_CurrentSensorGENERALonCurrentChangeCallback[CurrentSensorChannel]
-                ########
+                    self.CurrentSensorList_Current_Amps_Raw_LAST[CurrentSensorChannel] = self.CurrentSensorList_Current_Amps_Raw [CurrentSensorChannel]
 
-                self.CurrentSensorList_Current_Amps_Raw[CurrentSensorChannel] = Current_Amps
-                self.CurrentSensorList_Current_Amps_Filtered[CurrentSensorChannel] = self.CurrentSensorList_Current_Amps_LowPassFilter_ReubenPython2and3ClassObject[CurrentSensorChannel].AddDataPointFromExternalProgram(self.CurrentSensorList_Current_Amps_Raw[CurrentSensorChannel])["SignalOutSmoothed"]
-                #print("CurrentSensorGENERALonCurrentChangeCallback event fired for Channel " + str(CurrentSensorChannel))
-            ##############################
+                    #print("CurrentSensorGENERALonCurrentChangeCallback event fired for Channel " + str(CurrentSensorChannel))
+                    ############################################################
 
-            ############################## MUST CLOSE THE PHIDGETS TO STOP CALLBACK FUNCTIONS WHEN EXITING THE PROGRAM
+                ############################################################
+                ############################################################
+
+            ############################################################
+            ############################################################
+            ############################################################
+
+            ############################################################ MUST CLOSE THE PHIDGETS TO STOP CALLBACK FUNCTIONS WHEN EXITING THE PROGRAM
+            ############################################################
+            ############################################################
             else:
                 for PhidgetsCurrentSensorObject in self.CurrentSensorList_PhidgetsCurrentSensorObjects:
                     PhidgetsCurrentSensorObject.close()
-            ##############################
+            ############################################################
+            ############################################################
+            ############################################################
 
         except:
             exceptions = sys.exc_info()[0]
@@ -842,6 +897,7 @@ class PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class(Frame): #Su
             #Updating self.MostRecentDataDict here because there is NO MainThread where we could do so.
             self.MostRecentDataDict = dict([("CurrentSensorList_Current_Amps_Raw", self.CurrentSensorList_Current_Amps_Raw),
                                                  ("CurrentSensorList_Current_Amps_Filtered", self.CurrentSensorList_Current_Amps_Filtered),
+                                                 ("CurrentSensorList_CurrentDerivative_AmpsPerSec", self.CurrentSensorList_CurrentDerivative_AmpsPerSec),
                                                  ("CurrentSensorList_ErrorCallbackFiredFlag", self.CurrentSensorList_ErrorCallbackFiredFlag),
                                                  ("Time", self.CurrentSensorList_CurrentTime_CurrentSensorGENERALonCurrentChangeCallback[0])])
 
@@ -923,9 +979,11 @@ class PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class(Frame): #Su
     ##########################################################################################################
     def StartGUI(self, GuiParent):
 
-        self.GUI_Thread_ThreadingObject = threading.Thread(target=self.GUI_Thread, args=(GuiParent,))
-        self.GUI_Thread_ThreadingObject.setDaemon(True) #Should mean that the GUI thread is destroyed automatically when the main thread is destroyed.
-        self.GUI_Thread_ThreadingObject.start()
+        #self.GUI_Thread_ThreadingObject = threading.Thread(target=self.GUI_Thread, args=(GuiParent,))
+        #self.GUI_Thread_ThreadingObject.setDaemon(True) #Should mean that the GUI thread is destroyed automatically when the main thread is destroyed.
+        #self.GUI_Thread_ThreadingObject.start()
+
+        self.GUI_Thread(GuiParent)
     ##########################################################################################################
     ##########################################################################################################
 
@@ -1034,11 +1092,10 @@ class PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class(Frame): #Su
                     try:
 
                         #######################################################
-                        self.CurrentSensor_Label["text"] = "Current Raw: " + self.ConvertFloatToStringWithNumberOfLeadingNumbersAndDecimalPlaces_NumberOrListInput(self.CurrentSensorList_Current_Amps_Raw, 0, 5) + \
-                                                    "\nCurrent Filtered: " + self.ConvertFloatToStringWithNumberOfLeadingNumbersAndDecimalPlaces_NumberOrListInput(self.CurrentSensorList_Current_Amps_Filtered, 0, 5) + \
-                                                    "\nTime: " + self.ConvertFloatToStringWithNumberOfLeadingNumbersAndDecimalPlaces_NumberOrListInput(self.CurrentSensorList_CurrentTime_CurrentSensorGENERALonCurrentChangeCallback[0], 0, 3) + \
-                                                    "\nCallback Frequency: " + self.ConvertFloatToStringWithNumberOfLeadingNumbersAndDecimalPlaces_NumberOrListInput(self.CurrentSensorList_DataStreamingFrequency_CurrentSensorGENERALonCurrentChangeCallback, 0, 3)
-                                                    #"\nMain Thread Frequency: " + self.ConvertFloatToStringWithNumberOfLeadingNumbersAndDecimalPlaces_NumberOrListInput(self.DataStreamingFrequency_CalculatedFromMainThread, 0, 3) #Not using MainThread as callback is sufficient
+                        self.CurrentSensor_Label["text"] = self.ConvertDictToProperlyFormattedStringForPrinting(self.MostRecentDataDict,
+                                                                                                    NumberOfDecimalsPlaceToUse = 5,
+                                                                                                    NumberOfEntriesPerLine = 1,
+                                                                                                    NumberOfTabsBetweenItems = 3)
                         #######################################################
 
                         #######################################################
@@ -1099,15 +1156,6 @@ class PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class(Frame): #Su
                     self.PrintToGui_Label_TextInput_Str = self.PrintToGui_Label_TextInput_Str + "\n"
             ################################
 
-    ##########################################################################################################
-    ##########################################################################################################
-
-    ##########################################################################################################
-    ##########################################################################################################
-    def IsInputList(self, InputToCheck):
-
-        result = isinstance(InputToCheck, list)
-        return result
     ##########################################################################################################
     ##########################################################################################################
 
@@ -1273,3 +1321,45 @@ class PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class(Frame): #Su
     ##########################################################################################################
     ##########################################################################################################
 
+    ##########################################################################################################
+    ##########################################################################################################
+    def ConvertDictToProperlyFormattedStringForPrinting(self, DictToPrint, NumberOfDecimalsPlaceToUse = 3, NumberOfEntriesPerLine = 1, NumberOfTabsBetweenItems = 3):
+
+        ProperlyFormattedStringForPrinting = ""
+        ItemsPerLineCounter = 0
+
+        for Key in DictToPrint:
+
+            ##########################################################################################################
+            if isinstance(DictToPrint[Key], dict): #RECURSION
+                ProperlyFormattedStringForPrinting = ProperlyFormattedStringForPrinting + \
+                                                     Key + ":\n" + \
+                                                     self.ConvertDictToProperlyFormattedStringForPrinting(DictToPrint[Key], NumberOfDecimalsPlaceToUse, NumberOfEntriesPerLine, NumberOfTabsBetweenItems)
+
+            else:
+                ProperlyFormattedStringForPrinting = ProperlyFormattedStringForPrinting + \
+                                                     Key + ": " + \
+                                                     self.ConvertFloatToStringWithNumberOfLeadingNumbersAndDecimalPlaces_NumberOrListInput(DictToPrint[Key], 0, NumberOfDecimalsPlaceToUse)
+            ##########################################################################################################
+
+            ##########################################################################################################
+            if ItemsPerLineCounter < NumberOfEntriesPerLine - 1:
+                ProperlyFormattedStringForPrinting = ProperlyFormattedStringForPrinting + "\t"*NumberOfTabsBetweenItems
+                ItemsPerLineCounter = ItemsPerLineCounter + 1
+            else:
+                ProperlyFormattedStringForPrinting = ProperlyFormattedStringForPrinting + "\n"
+                ItemsPerLineCounter = 0
+            ##########################################################################################################
+
+        return ProperlyFormattedStringForPrinting
+    ##########################################################################################################
+    ##########################################################################################################
+
+    ##########################################################################################################
+    ##########################################################################################################
+    def IsInputList(self, InputToCheck):
+
+        result = isinstance(InputToCheck, list)
+        return result
+    ##########################################################################################################
+    ##########################################################################################################

@@ -6,7 +6,7 @@ reuben.brewer@gmail.com
 www.reubotics.com
 
 Apache 2 License
-Software Revision E, 08/29/2022
+Software Revision F, 05/10/2023
 
 Verified working on: Python 2.7, 3.8 for Windows 8.1, 10 64-bit and Raspberry Pi Buster (no Mac testing yet).
 '''
@@ -59,19 +59,6 @@ def getPreciseSecondsTimeStampString():
 
 ##########################################################################################################
 ##########################################################################################################
-def TestButtonResponse():
-    global MyPrint_ReubenPython2and3ClassObject
-    global USE_MYPRINT_FLAG
-
-    if USE_MYPRINT_FLAG == 1:
-        MyPrint_ReubenPython2and3ClassObject.my_print("Test Button was Pressed!")
-    else:
-        print("Test Button was Pressed!")
-##########################################################################################################
-##########################################################################################################
-
-##########################################################################################################
-##########################################################################################################
 def GUI_update_clock():
     global root
     global EXIT_PROGRAM_FLAG
@@ -79,8 +66,8 @@ def GUI_update_clock():
     global USE_GUI_FLAG
 
     global PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3ClassObject
-    global CurrentSensor_OPEN_FLAG
-    global SHOW_IN_GUI_CurrentSensor_FLAG
+    global DC30AmpCurrentSensor_OPEN_FLAG
+    global SHOW_IN_GUI_DC30AmpCurrentSensor_FLAG
 
     global MyPrint_ReubenPython2and3ClassObject
     global MYPRINT_OPEN_FLAG
@@ -92,7 +79,7 @@ def GUI_update_clock():
         #########################################################
 
             #########################################################
-            if CurrentSensor_OPEN_FLAG == 1 and SHOW_IN_GUI_CurrentSensor_FLAG == 1:
+            if DC30AmpCurrentSensor_OPEN_FLAG == 1 and SHOW_IN_GUI_DC30AmpCurrentSensor_FLAG == 1:
                 PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3ClassObject.GUI_update_clock()
             #########################################################
 
@@ -140,15 +127,15 @@ def GUI_Thread():
     #################################################
     global TabControlObject
     global Tab_MainControls
-    global Tab_CurrentSensor
+    global Tab_DC30AmpCurrentSensor
     global Tab_MyPrint
 
     if USE_TABS_IN_GUI_FLAG == 1:
         #################################################
         TabControlObject = ttk.Notebook(root)
 
-        Tab_CurrentSensor = ttk.Frame(TabControlObject)
-        TabControlObject.add(Tab_CurrentSensor, text='   CurrentSensor   ')
+        Tab_DC30AmpCurrentSensor = ttk.Frame(TabControlObject)
+        TabControlObject.add(Tab_DC30AmpCurrentSensor, text='   CurrentSensor   ')
 
         Tab_MainControls = ttk.Frame(TabControlObject)
         TabControlObject.add(Tab_MainControls, text='   Main Controls   ')
@@ -166,16 +153,11 @@ def GUI_Thread():
     else:
         #################################################
         Tab_MainControls = root
-        Tab_CurrentSensor = root
+        Tab_DC30AmpCurrentSensor = root
         Tab_MyPrint = root
         #################################################
 
     #################################################
-    #################################################
-
-    #################################################
-    TestButton = Button(Tab_MainControls, text='Test Button', state="normal", width=20, command=lambda i=1: TestButtonResponse())
-    TestButton.grid(row=0, column=0, padx=5, pady=1)
     #################################################
 
     ################################################# THIS BLOCK MUST COME 2ND-TO-LAST IN def GUI_Thread() IF USING TABS.
@@ -230,8 +212,8 @@ if __name__ == '__main__':
     global USE_TABS_IN_GUI_FLAG
     USE_TABS_IN_GUI_FLAG = 1
 
-    global USE_CurrentSensor_FLAG
-    USE_CurrentSensor_FLAG = 1
+    global USE_DC30AmpCurrentSensor_FLAG
+    USE_DC30AmpCurrentSensor_FLAG = 1
 
     global USE_MYPRINT_FLAG
     USE_MYPRINT_FLAG = 1
@@ -243,8 +225,8 @@ if __name__ == '__main__':
 
     #################################################
     #################################################
-    global SHOW_IN_GUI_CurrentSensor_FLAG
-    SHOW_IN_GUI_CurrentSensor_FLAG = 1
+    global SHOW_IN_GUI_DC30AmpCurrentSensor_FLAG
+    SHOW_IN_GUI_DC30AmpCurrentSensor_FLAG = 1
 
     global SHOW_IN_GUI_MYPRINT_FLAG
     SHOW_IN_GUI_MYPRINT_FLAG = 1
@@ -253,19 +235,19 @@ if __name__ == '__main__':
 
     #################################################
     #################################################
-    global GUI_ROW_CurrentSensor
-    global GUI_COLUMN_CurrentSensor
-    global GUI_PADX_CurrentSensor
-    global GUI_PADY_CurrentSensor
-    global GUI_ROWSPAN_CurrentSensor
-    global GUI_COLUMNSPAN_CurrentSensor
-    GUI_ROW_CurrentSensor = 1
+    global GUI_ROW_DC30AmpCurrentSensor
+    global GUI_COLUMN_DC30AmpCurrentSensor
+    global GUI_PADX_DC30AmpCurrentSensor
+    global GUI_PADY_DC30AmpCurrentSensor
+    global GUI_ROWSPAN_DC30AmpCurrentSensor
+    global GUI_COLUMNSPAN_DC30AmpCurrentSensor
+    GUI_ROW_DC30AmpCurrentSensor = 1
 
-    GUI_COLUMN_CurrentSensor = 0
-    GUI_PADX_CurrentSensor = 1
-    GUI_PADY_CurrentSensor = 1
-    GUI_ROWSPAN_CurrentSensor = 1
-    GUI_COLUMNSPAN_CurrentSensor = 1
+    GUI_COLUMN_DC30AmpCurrentSensor = 0
+    GUI_PADX_DC30AmpCurrentSensor = 1
+    GUI_PADY_DC30AmpCurrentSensor = 1
+    GUI_ROWSPAN_DC30AmpCurrentSensor = 1
+    GUI_COLUMNSPAN_DC30AmpCurrentSensor = 1
 
     global GUI_ROW_MYPRINT
     global GUI_COLUMN_MYPRINT
@@ -310,7 +292,7 @@ if __name__ == '__main__':
 
     global TabControlObject
     global Tab_MainControls
-    global Tab_CurrentSensor
+    global Tab_DC30AmpCurrentSensor
     global Tab_MyPrint
 
     global GUI_RootAfterCallbackInterval_Milliseconds
@@ -322,23 +304,26 @@ if __name__ == '__main__':
     #################################################
     global PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3ClassObject
 
-    global CurrentSensor_OPEN_FLAG
-    CurrentSensor_OPEN_FLAG = -1
+    global DC30AmpCurrentSensor_OPEN_FLAG
+    DC30AmpCurrentSensor_OPEN_FLAG = -1
 
-    global CurrentSensor_MostRecentDict
-    CurrentSensor_MostRecentDict = dict()
+    global DC30AmpCurrentSensor_MostRecentDict
+    DC30AmpCurrentSensor_MostRecentDict = dict()
 
-    global CurrentSensor_MostRecentDict_CurrentSensorList_Current_Amps_Raw
-    CurrentSensor_MostRecentDict_CurrentSensorList_Current_Amps_Raw = [-11111.0]*1
+    global DC30AmpCurrentSensor_MostRecentDict_CurrentSensorList_Current_Amps_Raw
+    DC30AmpCurrentSensor_MostRecentDict_CurrentSensorList_Current_Amps_Raw = [-11111.0]*1
 
-    global CurrentSensor_MostRecentDict_CurrentSensorList_Current_Amps_Filtered
-    CurrentSensor_MostRecentDict_CurrentSensorList_Current_Amps_Filtered = [-11111.0]*1
+    global DC30AmpCurrentSensor_MostRecentDict_CurrentSensorList_Current_Amps_Filtered
+    DC30AmpCurrentSensor_MostRecentDict_CurrentSensorList_Current_Amps_Filtered = [-11111.0]*1
 
-    global CurrentSensor_MostRecentDict_CurrentSensorList_ErrorCallbackFiredFlag
-    CurrentSensor_MostRecentDict_CurrentSensorList_ErrorCallbackFiredFlag = [-1]*1
+    global DC30AmpCurrentSensor_MostRecentDict_CurrentSensorList_CurrentDerivative_AmpsPerSec
+    DC30AmpCurrentSensor_MostRecentDict_CurrentSensorList_CurrentDerivative_AmpsPerSec = [-11111.0]*1
 
-    global CurrentSensor_MostRecentDict_Time
-    CurrentSensor_MostRecentDict_Time = -11111.0
+    global DC30AmpCurrentSensor_MostRecentDict_CurrentSensorList_ErrorCallbackFiredFlag
+    DC30AmpCurrentSensor_MostRecentDict_CurrentSensorList_ErrorCallbackFiredFlag = [-1]*1
+
+    global DC30AmpCurrentSensor_MostRecentDict_Time
+    DC30AmpCurrentSensor_MostRecentDict_Time = -11111.0
     #################################################
     #################################################
 
@@ -380,7 +365,7 @@ if __name__ == '__main__':
     else:
         root = None
         Tab_MainControls = None
-        Tab_CurrentSensor = None
+        Tab_DC30AmpCurrentSensor = None
         Tab_MyPrint = None
     #################################################
     #################################################
@@ -388,33 +373,34 @@ if __name__ == '__main__':
     #################################################
     #################################################
     global PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3ClassObject_GUIparametersDict
-    PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3ClassObject_GUIparametersDict = dict([("USE_GUI_FLAG", USE_GUI_FLAG and SHOW_IN_GUI_CurrentSensor_FLAG),
-                                    ("root", Tab_CurrentSensor),
+    PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3ClassObject_GUIparametersDict = dict([("USE_GUI_FLAG", USE_GUI_FLAG and SHOW_IN_GUI_DC30AmpCurrentSensor_FLAG),
+                                    ("root", Tab_DC30AmpCurrentSensor),
                                     ("EnableInternal_MyPrint_Flag", 1),
                                     ("NumberOfPrintLines", 10),
                                     ("UseBorderAroundThisGuiObjectFlag", 0),
-                                    ("GUI_ROW", GUI_ROW_CurrentSensor),
-                                    ("GUI_COLUMN", GUI_COLUMN_CurrentSensor),
-                                    ("GUI_PADX", GUI_PADX_CurrentSensor),
-                                    ("GUI_PADY", GUI_PADY_CurrentSensor),
-                                    ("GUI_ROWSPAN", GUI_ROWSPAN_CurrentSensor),
-                                    ("GUI_COLUMNSPAN", GUI_COLUMNSPAN_CurrentSensor)])
+                                    ("GUI_ROW", GUI_ROW_DC30AmpCurrentSensor),
+                                    ("GUI_COLUMN", GUI_COLUMN_DC30AmpCurrentSensor),
+                                    ("GUI_PADX", GUI_PADX_DC30AmpCurrentSensor),
+                                    ("GUI_PADY", GUI_PADY_DC30AmpCurrentSensor),
+                                    ("GUI_ROWSPAN", GUI_ROWSPAN_DC30AmpCurrentSensor),
+                                    ("GUI_COLUMNSPAN", GUI_COLUMNSPAN_DC30AmpCurrentSensor)])
 
     global PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3ClassObject_setup_dict
     PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3ClassObject_setup_dict = dict([("GUIparametersDict", PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3ClassObject_GUIparametersDict),
                                                                                 ("VINT_DesiredSerialNumber", -1), #-1 MEANS ANY SN, CHANGE THIS TO MATCH YOUR UNIQUE VINT
-                                                                                ("VINT_DesiredPortNumber", 4), #CHANGE THIS TO MATCH YOUR UNIQUE VINT
+                                                                                ("VINT_DesiredPortNumber", 0), #CHANGE THIS TO MATCH YOUR UNIQUE VINT
                                                                                 ("DesiredDeviceID", 105),
                                                                                 ("WaitForAttached_TimeoutDuration_Milliseconds", 5000),
                                                                                 ("NameToDisplay_UserSet", "Reuben's Test VCP1100 Current Sensor Board"),
                                                                                 ("UsePhidgetsLoggingInternalToThisClassObjectFlag", 1),
                                                                                 ("DataCallbackUpdateDeltaT_ms", 20),
-                                                                                ("CurrentSensorList_Current_Amps_ExponentialFilterLambda", [0.5])])
+                                                                                ("CurrentSensorList_Current_Amps_ExponentialFilterLambda", [0.95]),
+                                                                                ("CurrentSensorList_CurrentDerivative_AmpsPerSec_ExponentialFilterLambda", [0.5])]) #new_filtered_value = k * raw_sensor_value + (1 - k) * old_filtered_value
 
-    if USE_CurrentSensor_FLAG == 1:
+    if USE_DC30AmpCurrentSensor_FLAG == 1:
         try:
             PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3ClassObject = PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class(PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3ClassObject_setup_dict)
-            CurrentSensor_OPEN_FLAG = PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3ClassObject.OBJECT_CREATED_SUCCESSFULLY_FLAG
+            DC30AmpCurrentSensor_OPEN_FLAG = PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3ClassObject.OBJECT_CREATED_SUCCESSFULLY_FLAG
 
         except:
             exceptions = sys.exc_info()[0]
@@ -471,7 +457,7 @@ if __name__ == '__main__':
                                                                                         ("ParentPID", os.getpid()),
                                                                                         ("WatchdogTimerExpirationDurationSeconds_StandAlonePlottingProcess", 5.0),
                                                                                         ("MarkerSize", 3),
-                                                                                        ("CurvesToPlotNamesAndColorsDictOfLists", dict([("NameList", ["Raw", "Filtered"]),("ColorList", ["Red", "Green"])])),
+                                                                                        ("CurvesToPlotNamesAndColorsDictOfLists", dict([("NameList", ["Raw", "Filtered", "Derivative"]),("ColorList", ["Red", "Blue", "Green"])])),
                                                                                         ("NumberOfDataPointToPlot", 50),
                                                                                         ("XaxisNumberOfTickMarks", 10),
                                                                                         ("YaxisNumberOfTickMarks", 10),
@@ -502,7 +488,7 @@ if __name__ == '__main__':
 
     #################################################
     #################################################
-    if USE_CurrentSensor_FLAG == 1 and CurrentSensor_OPEN_FLAG != 1:
+    if USE_DC30AmpCurrentSensor_FLAG == 1 and DC30AmpCurrentSensor_OPEN_FLAG != 1:
         print("Failed to open PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class.")
         ExitProgram_Callback()
     #################################################
@@ -540,17 +526,18 @@ if __name__ == '__main__':
 
         #################################################### GET's
         ####################################################
-        if CurrentSensor_OPEN_FLAG == 1:
+        if DC30AmpCurrentSensor_OPEN_FLAG == 1:
 
-            CurrentSensor_MostRecentDict = PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3ClassObject.GetMostRecentDataDict()
+            DC30AmpCurrentSensor_MostRecentDict = PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3ClassObject.GetMostRecentDataDict()
 
-            if "Time" in CurrentSensor_MostRecentDict:
-                CurrentSensor_MostRecentDict_CurrentSensorList_Current_Amps_Raw = CurrentSensor_MostRecentDict["CurrentSensorList_Current_Amps_Raw"]
-                CurrentSensor_MostRecentDict_CurrentSensorList_Current_Amps_Filtered = CurrentSensor_MostRecentDict["CurrentSensorList_Current_Amps_Filtered"]
-                CurrentSensor_MostRecentDict_CurrentSensorList_ErrorCallbackFiredFlag = CurrentSensor_MostRecentDict["CurrentSensorList_ErrorCallbackFiredFlag"]
-                CurrentSensor_MostRecentDict_Time = CurrentSensor_MostRecentDict["Time"]
+            if "Time" in DC30AmpCurrentSensor_MostRecentDict:
+                DC30AmpCurrentSensor_MostRecentDict_CurrentSensorList_Current_Amps_Raw = DC30AmpCurrentSensor_MostRecentDict["CurrentSensorList_Current_Amps_Raw"]
+                DC30AmpCurrentSensor_MostRecentDict_CurrentSensorList_Current_Amps_Filtered = DC30AmpCurrentSensor_MostRecentDict["CurrentSensorList_Current_Amps_Filtered"]
+                DC30AmpCurrentSensor_MostRecentDict_CurrentSensorList_CurrentDerivative_AmpsPerSec = DC30AmpCurrentSensor_MostRecentDict["CurrentSensorList_CurrentDerivative_AmpsPerSec"]
+                DC30AmpCurrentSensor_MostRecentDict_CurrentSensorList_ErrorCallbackFiredFlag = DC30AmpCurrentSensor_MostRecentDict["CurrentSensorList_ErrorCallbackFiredFlag"]
+                DC30AmpCurrentSensor_MostRecentDict_Time = DC30AmpCurrentSensor_MostRecentDict["Time"]
 
-                #print("CurrentSensor_MostRecentDict_Time: " + str(CurrentSensor_MostRecentDict_Time))
+                #print("DC30AmpCurrentSensor_MostRecentDict_Time: " + str(DC30AmpCurrentSensor_MostRecentDict_Time))
         ####################################################
         ####################################################
 
@@ -565,8 +552,8 @@ if __name__ == '__main__':
                 MyPlotterPureTkinterStandAloneProcess_ReubenPython2and3ClassObject_MostRecentDict_StandAlonePlottingProcess_ReadyForWritingFlag = MyPlotterPureTkinterStandAloneProcess_ReubenPython2and3ClassObject_MostRecentDict["StandAlonePlottingProcess_ReadyForWritingFlag"]
 
                 if MyPlotterPureTkinterStandAloneProcess_ReubenPython2and3ClassObject_MostRecentDict_StandAlonePlottingProcess_ReadyForWritingFlag == 1:
-                    if CurrentTime_MainLoopThread - LastTime_MainLoopThread_PLOTTER >= 0.030:
-                        MyPlotterPureTkinterStandAloneProcess_ReubenPython2and3ClassObject.ExternalAddPointOrListOfPointsToPlot(["Raw", "Filtered"], [CurrentTime_MainLoopThread]*2, [CurrentSensor_MostRecentDict_CurrentSensorList_Current_Amps_Raw[0], CurrentSensor_MostRecentDict_CurrentSensorList_Current_Amps_Filtered[0]])
+                    if CurrentTime_MainLoopThread - LastTime_MainLoopThread_PLOTTER >= 0.040:
+                        MyPlotterPureTkinterStandAloneProcess_ReubenPython2and3ClassObject.ExternalAddPointOrListOfPointsToPlot(["Raw", "Filtered", "Derivative"], [CurrentTime_MainLoopThread]*3, [DC30AmpCurrentSensor_MostRecentDict_CurrentSensorList_Current_Amps_Raw, DC30AmpCurrentSensor_MostRecentDict_CurrentSensorList_Current_Amps_Filtered, DC30AmpCurrentSensor_MostRecentDict_CurrentSensorList_CurrentDerivative_AmpsPerSec])
                         LastTime_MainLoopThread_PLOTTER = CurrentTime_MainLoopThread
             ####################################################
 
@@ -583,7 +570,7 @@ if __name__ == '__main__':
     print("Exiting main program 'test_program_for_PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class.")
 
     #################################################
-    if CurrentSensor_OPEN_FLAG == 1:
+    if DC30AmpCurrentSensor_OPEN_FLAG == 1:
         PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3ClassObject.ExitProgram_Callback()
     #################################################
 
