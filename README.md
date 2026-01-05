@@ -5,11 +5,8 @@ PhidgetsCurrentSensor30ampDConlyVCP11000_ReubenPython2and3Class
 Wrapper (including ability to hook to Tkinter GUI) to control Phidget 30A DC Current Sensor VCP1100 (VINT).
 
 From Phidgets' website:
-
 "The VCP1100 measures the current flow in an electronic circuit or device.
-
 This Phidget connects to your computer through a VINT Hub.
-
 Measure in-line DC current flow of up to 30A."
 
 Phidget 30A DC Current Sensor
@@ -26,34 +23,35 @@ www.reubotics.com
 
 Apache 2 License
 
-Software Revision F, 05/10/2023
+Software Revision G, 12/31/2025
 
-Verified working on: 
+Verified working on:
 
-Python 2.7, 3.8.
+Python 3.12/13.
 
-Windows 8.1, 10 64-bit
+Windows 10/11 64-bit
 
-Raspberry Pi Buster 
+Raspberry Pi Bookworm
 
 (no Mac testing yet)
 
 *NOTE:
 
 1. YOU MUST INSTALL BOTH THE Phidget22 LIBRARY AS WELL AS THE PYTHON MODULE.
+
 2. Current must flow from the device's positive (+) terminal to negative (-) terminal.*
 
 ###########################
 
 ########################### Python module installation instructions, all OS's
 
-PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class, ListOfModuleDependencies: ['future.builtins', 'LowPassFilterForDictsOfLists_ReubenPython2and3Class', 'Phidget22']
+PhidgetDCmotorDCC1000controller_ReubenPython2and3Class, ListOfModuleDependencies: ['LowPassFilter_ReubenPython2and3Class', 'Phidget22', 'PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class', 'ReubenGithubCodeModulePaths']
 
-PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class, ListOfModuleDependencies_TestProgram: ['MyPlotterPureTkinterStandAloneProcess_ReubenPython2and3Class', 'MyPrint_ReubenPython2and3Class']
+PhidgetDCmotorDCC1000controller_ReubenPython2and3Class, ListOfModuleDependencies_TestProgram: ['keyboard', 'MyPlotterPureTkinterStandAloneProcess_ReubenPython2and3Class', 'MyPrint_ReubenPython2and3Class', 'ReubenGithubCodeModulePaths']
 
-PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class, ListOfModuleDependencies_NestedLayers: ['future.builtins', 'numpy', 'pexpect', 'psutil']
+PhidgetDCmotorDCC1000controller_ReubenPython2and3Class, ListOfModuleDependencies_NestedLayers: ['GetCPUandMemoryUsageOfProcessByPID_ReubenPython3Class', 'LowPassFilterForDictsOfLists_ReubenPython2and3Class', 'numpy', 'pexpect', 'Phidget22', 'psutil', 'pyautogui', 'ReubenGithubCodeModulePaths']
 
-PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class, ListOfModuleDependencies_All:['future.builtins', 'LowPassFilterForDictsOfLists_ReubenPython2and3Class', 'MyPlotterPureTkinterStandAloneProcess_ReubenPython2and3Class', 'MyPrint_ReubenPython2and3Class', 'numpy', 'pexpect', 'Phidget22', 'psutil']
+PhidgetDCmotorDCC1000controller_ReubenPython2and3Class, ListOfModuleDependencies_All:['GetCPUandMemoryUsageOfProcessByPID_ReubenPython3Class', 'keyboard', 'LowPassFilter_ReubenPython2and3Class', 'LowPassFilterForDictsOfLists_ReubenPython2and3Class', 'MyPlotterPureTkinterStandAloneProcess_ReubenPython2and3Class', 'MyPrint_ReubenPython2and3Class', 'numpy', 'pexpect', 'Phidget22', 'PhidgetsCurrentSensor30ampDConlyVCP1100_ReubenPython2and3Class', 'psutil', 'pyautogui', 'ReubenGithubCodeModulePaths']
 
 https://pypi.org/project/Phidget22/#files
 
